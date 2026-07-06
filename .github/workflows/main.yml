@@ -5,14 +5,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install Flet and Build APK
+          
+      - name: Install Flet Swiftly
         run: |
-          pip install "flet[cli]"
-          flet build apk
+          python -m pip install --upgrade pip
+          python -m pip install "flet[cli]" --break-system-packages
+
+      - name: Setup Android SDK Environment
+        uses: android-actions/setup-android@v3
+
+      - name: Build Final APK
+        run: |
+          flet build apk --no-config
+          
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
